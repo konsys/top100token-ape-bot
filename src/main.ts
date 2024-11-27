@@ -85,7 +85,7 @@ if (app) {
   });
 }
 
-var appState: AppState = {
+const appState: AppState = {
   syncStared: false,
   buttonState: 'none',
   selectedToken: undefined,
@@ -410,7 +410,7 @@ const start = async (broker: ElectronBroker) => {
       }
 
       Logger.log('portfolio:stop', address);
-    } catch (error) {}
+    } catch (error) { }
   });
 
   broker.msg.on('portfolio:sell', async (event, address) => {
@@ -422,7 +422,7 @@ const start = async (broker: ElectronBroker) => {
       }
 
       Logger.log('portfolio:sell', address);
-    } catch (error) {}
+    } catch (error) { }
   });
 
   broker.msg.on('wallet:generate', async (event, arg) => {
@@ -433,7 +433,7 @@ const start = async (broker: ElectronBroker) => {
         address: result.address,
         privateKey: result.privateKey,
       });
-    } catch (error) {}
+    } catch (error) { }
   });
 
   broker.msg.on('privateKey:new', async (event, arg) => {
@@ -444,6 +444,6 @@ const start = async (broker: ElectronBroker) => {
         address: result.address,
         privateKey: result.privateKey,
       });
-    } catch (error) {}
+    } catch (error) { }
   });
 };
