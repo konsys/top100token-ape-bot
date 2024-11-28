@@ -122,6 +122,8 @@ const startNewApe = async (apeAddress: string, broker: ElectronBroker) => {
       gasLimit: appState.settings.gasLimit,
       maxSlippage: appState.settings.maxSlippage,
     });
+    // 0x514910771AF9Ca656af840dff83E8264EcF986CA 
+    console.log(1111, apeAddress);
 
     await apeEngine.SafeBuyApe(apeAddress);
 
@@ -162,10 +164,10 @@ const loadNewApe = async (apeAddress: string, broker: ElectronBroker) => {
       };
     }
 
-    Logger.log('Honey/slippage result:', slippage);
+    // Logger.log('Honey/slippage result:', slippage);
 
     const balance = await wallet.BalanceOfErc20(apeAddress);
-    console.log(11, balance)
+
     if (balance) {
       appState.selectedToken = {
         ...appState.selectedToken,

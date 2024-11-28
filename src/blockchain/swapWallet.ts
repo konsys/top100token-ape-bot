@@ -106,7 +106,6 @@ export class SwapWallet {
   }> {
     try {
       const honeyChecker = new HoneyChecker(this.web3);
-
       const slippageResult = await honeyChecker.RunHoneyContract({
         from: this.walletAddress,
         amount: amount,
@@ -115,6 +114,7 @@ export class SwapWallet {
         router: router ?? this.chainData.router,
         gasPrice: this.gasPrice,
       });
+
 
       return {
         ...slippageResult,

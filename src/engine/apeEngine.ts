@@ -5,7 +5,7 @@ BigNumber.set({ EXPONENTIAL_AT: 80 });
 
 import { approveInfinity } from '../contants';
 
-import { ApeContract, ApeOrder, ApeOrderStatus, Balance, EngineEvent, ApeHistoryDB } from '../types';
+import { ApeContract, ApeOrder, ApeOrderStatus, Balance, EngineEvent, ApeHistoryDB, ApeState } from '../types';
 
 import { SwapWallet } from '../blockchain/swapWallet';
 
@@ -57,7 +57,7 @@ export class ApeEngine extends EventEmitter {
   public minProfit: number;
 
   private lastState = '';
-  public state = 'Wait for buy!';
+  public state: ApeState = ApeState.wait;
 
   public isApproved = false;
   public isSelling = false;
@@ -228,7 +228,7 @@ export class ApeEngine extends EventEmitter {
 
   async HandleSafeBuyApe() {
     try {
-      this.state = 'APE WAIT FOR LIQUDITY!';
+      this.state = ApeState.waitLiquidity;
 
       if (!this.erc20Data) {
         const basicData = await this.swapWallet.GetERC20Data(this.contractAddress);
@@ -242,9 +242,9 @@ export class ApeEngine extends EventEmitter {
         this.swapWallet.chainData.router,
       );
 
-      Logger.log('Honey / Slip checker result', {
-        ...slipResult,
-      });
+      // Logger.log('Honey / Slip checker result', {
+      //   ...slipResult,
+      // });
 
       if (slipResult.isHoneypot === 0) {
         const buyTax = Number(slipResult.buyTax) / 100;
@@ -263,7 +263,7 @@ export class ApeEngine extends EventEmitter {
         this.currBuyRetry += 1;
 
         if (this.currBuyRetry >= this.maxBuyRetry) {
-          this.state = 'APE BUY RETRY LIMIT REACHED, APE STOPPED!';
+          this.state = ApeState.retryBuyLimitAndStopped;
           this.StopApe();
           return;
         }
@@ -279,7 +279,7 @@ export class ApeEngine extends EventEmitter {
       this.currBuyRetry += 1;
 
       if (this.currBuyRetry >= this.maxBuyRetry) {
-        this.state = 'APE BUY RETRY LIMIT REACHED, APE STOPPED!';
+        this.state = ApeState.retryBuyLimitAndStopped;
         this.StopApe();
         return;
       } else {
@@ -338,11 +338,11 @@ export class ApeEngine extends EventEmitter {
 
   private async HandleApeBuyEvent(address: string, minAmount: string): Promise<any> {
     try {
-      this.state = 'APE BUY STARTED!';
+      this.state = ApeState.buyStarted;
       this.orderStatus = ApeOrderStatus.buyStart;
 
       if (this.currBuyRetry >= this.maxBuyRetry) {
-        this.state = 'APE BUY RETRY LIMIT REACHED, APE STOPPED!';
+        this.state = ApeState.retryBuyLimitAndStopped;
         this.StopApe();
         return;
       }
@@ -357,7 +357,7 @@ export class ApeEngine extends EventEmitter {
       const receipt = await this.swapWallet.SendSignedTx(singedTx);
 
       if (receipt) {
-        this.state = 'APE BUY SUCCESS!';
+        this.state = ApeState.buySuccess;
         this.orderStatus = ApeOrderStatus.buySuccess;
 
         this.Events.push({
@@ -380,7 +380,7 @@ export class ApeEngine extends EventEmitter {
     } catch (error) {
       Logger.log(error);
 
-      this.state = 'APE BUY ERROR, RETRY!';
+      this.state = ApeState.retryBuy;
 
       this.currBuyRetry += 1;
 
@@ -394,7 +394,7 @@ export class ApeEngine extends EventEmitter {
 
   private async HandleApeApprove(address: string): Promise<any> {
     try {
-      this.state = 'APE APPROVE STARTED!';
+      this.state = ApeState.approveStarted;
       this.orderStatus = ApeOrderStatus.approvedStart;
 
       const tokenBalance = await this.swapWallet.BalanceOfErc20(address);
@@ -406,14 +406,14 @@ export class ApeEngine extends EventEmitter {
       const allowed = await this.swapWallet.AllowanceErc20(address);
 
       if (allowed > 0) {
-        this.state = 'APE APPROVE FINISHED!';
+        this.state = ApeState.approveFinished;
         this.isApproved = true;
         this.orderStatus = ApeOrderStatus.approvedSuccess;
         return;
       }
 
       if (this.currApproveRerty >= this.maxApproveRerty) {
-        this.state = 'APE APPROVE, RETRY LIMIT REACHED, APE STOPPED!';
+        this.state = ApeState.retryApproveLimitAndStopped;
         this.StopApe();
         return;
       }
@@ -427,7 +427,7 @@ export class ApeEngine extends EventEmitter {
       const receipt = await this.swapWallet.SendSignedTx(singedTx);
 
       if (receipt) {
-        this.state = 'APE APPROVE FINISHED!';
+        this.state = ApeState.approveFinished;
         this.isApproved = true;
         this.orderStatus = ApeOrderStatus.approvedSuccess;
       } else {
@@ -436,7 +436,7 @@ export class ApeEngine extends EventEmitter {
     } catch (error) {
       Logger.log(error);
 
-      this.state = 'APE APPROVE FAILED RETRY!';
+      this.state = ApeState.approveFailed;
 
       this.currApproveRerty += 1;
 
@@ -461,12 +461,12 @@ export class ApeEngine extends EventEmitter {
       }
 
       if (this.currSellRetry >= this.maxSellRetry) {
-        this.state = 'APE SELL, RETRY LIMIT REACHED, APE STOPPED!';
+        this.state = ApeState.retrySellLimitAndStopped;
         this.StopApe();
         return;
       }
 
-      this.state = 'APE SELL STARTED!';
+      this.state = ApeState.startedSell;
       this.orderStatus = ApeOrderStatus.sellStart;
       this.isSelling = true;
 
@@ -484,7 +484,7 @@ export class ApeEngine extends EventEmitter {
       const receipt = await this.swapWallet.SendSignedTx(singedTx);
 
       if (receipt) {
-        this.state = 'APE SELL FINISHED!';
+        this.state = ApeState.finisheSell;
         this.orderStatus = ApeOrderStatus.sellSuccess;
         this.StopApe();
         this.orderStatus = ApeOrderStatus.finished;
@@ -510,7 +510,7 @@ export class ApeEngine extends EventEmitter {
     } catch (error) {
       Logger.log(error);
 
-      this.state = 'APE SELL FAILED, RETRY!';
+      this.state = ApeState.retrySellFailAndRetry;
 
       this.currSellRetry += 1;
 

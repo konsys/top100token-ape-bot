@@ -137,6 +137,26 @@ export enum ApeOrderStatus {
   stopped = 999,
 }
 
+
+export enum ApeState {
+  retryBuyLimitAndStopped = 'APE BUY RETRY LIMIT REACHED, APE STOPPED!',
+  buyStarted = 'APE BUY STARTED!',
+  buySuccess = 'APE BUY SUCCESS!',
+  wait = 'Wait for buy!',
+  waitLiquidity = 'APE WAIT FOR LIQUDITY!',
+  startedBuy = 'APE BUY STARTED!',
+  retryBuy = 'APE BUY STARTED!',
+  approveStarted = 'APE APPROVE STARTED!',
+  approveFinished = 'APE APPROVE FINISHED!',
+  approveFailed = 'APE APPROVE FAILED RETRY!',
+  retryApproveLimitAndStopped = 'APE APPROVE, RETRY LIMIT REACHED, APE STOPPED!',
+  startedSell = 'APE SELL STARTED!',
+  finisheSell = 'APE SELL FINISHED!',
+  retrySell = 'APE SELL RETRY STARTED!',
+  retrySellLimitAndStopped = 'APE SELL RETRY LIMIT REACHED, APE STOPPED!',
+  retrySellFailAndRetry = 'APE SELL FAILED, RETRY!',
+}
+
 export interface ApeOrder {
   chain: string;
   address: string;
