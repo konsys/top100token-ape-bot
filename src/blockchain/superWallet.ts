@@ -37,7 +37,7 @@ class SuperWalletClass {
     this.Add(chain, walletAddress);
   }
 
-  public async Add(chain: string, walletAddress: string) {
+  public async Add(chain: string, walletAddress: string): Promise<void> {
     try {
       if (!this.nonceStore.get(chain)?.has(walletAddress)) {
         const chainData = ethereumChains.find((e) => e.id === chain);
@@ -70,7 +70,7 @@ class SuperWalletClass {
     }
   }
 
-  public GetNonce(chain: string, walletAddress: string) {
+  public GetNonce(chain: string, walletAddress: string): number | null {
     if (this.nonceStore.get(chain)?.has(walletAddress)) {
       const nonce = this.nonceStore.get(chain)?.get(walletAddress);
 

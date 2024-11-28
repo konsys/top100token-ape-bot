@@ -1,4 +1,19 @@
-export const ethereumChains = [
+type TEtheriumChain = {
+  id: string;
+  name: string;
+  slug: string;
+  logo: string;
+  scanLogo: string;
+  router: string;
+  factory: string;
+  rcpAddress: string;
+  defaultGas: string;
+  wCoin: string;
+  testContract: string;
+  honeyChecker: string;
+  wUSD?: string;
+}
+export const ethereumChains: TEtheriumChain[] = [
   {
     id: 'binance',
     name: 'Binance Smart Chain (BSC)',

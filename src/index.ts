@@ -10,7 +10,7 @@ import * as path from 'path';
 import { app, BrowserWindow } from 'electron';
 import { createWeb3Wallet } from './blockchain/utilities/walletHandler';
 import BigNumber from 'bignumber.js';
-import { ApeOrder, AppState } from './types';
+import { ApeHistoryDB, ApeOrder, AppState } from './types';
 import { ElectronBroker } from './electronBroker';
 import { ElectronStore } from './util/electronStorage';
 import Web3 from 'web3';
@@ -27,7 +27,7 @@ if (process.env.NODE_ENV === 'development') {
     __dirname,
     'dev',             // npm scripts, means: npm run dev:electron-main
     path.join(__dirname, './'),      // cwd
-    1500,                            // debounce delay
+    15000,                            // debounce delay
   );
 
 }
@@ -39,7 +39,7 @@ BigNumber.set({ EXPONENTIAL_AT: 80 });
 
 SuperWallet.init();
 
-const store = new Store({
+const store = new Store<Record<string, string>>({
   encryptionKey: 'The old apple revels in its authority',
 });
 
@@ -61,15 +61,15 @@ const createWindow = (): Electron.BrowserWindow => {
 
   return window;
 };
-console.log(6663456);
+
 if (app) {
   Store.initRenderer();
   SQL.init();
-  /*
-  SQL.ReadData<ApeHistoryDB>('apeHistory').then((data)=> {
-    console.log(data)
-  });
-  */
+
+  // SQL.ReadData<ApeHistoryDB>('apeHistory').then((data) => {
+  //   console.log('SQL', 333, data)
+  // });
+
 
   app.whenReady().then(() => {
     const mainWindow = createWindow();
@@ -80,6 +80,7 @@ if (app) {
 
     start(electronBroker).then();
   });
+
   app.on('window-all-closed', () => {
     app.quit();
   });
@@ -135,6 +136,7 @@ const startNewApe = async (apeAddress: string, broker: ElectronBroker) => {
   }
 };
 
+// При смене адреса в инпуте 
 const loadNewApe = async (apeAddress: string, broker: ElectronBroker) => {
   if (apeAddress) {
     Logger.log('New ape address', apeAddress);
@@ -142,6 +144,8 @@ const loadNewApe = async (apeAddress: string, broker: ElectronBroker) => {
     const wallet = new SwapWallet(appState.settings.chainId, appState.privateKey);
 
     const erc20Data = await wallet.GetERC20Data(apeAddress);
+
+    // 0x514910771AF9Ca656af840dff83E8264EcF986CA 
 
     appState.selectedToken = {
       ...erc20Data,
@@ -161,7 +165,7 @@ const loadNewApe = async (apeAddress: string, broker: ElectronBroker) => {
     Logger.log('Honey/slippage result:', slippage);
 
     const balance = await wallet.BalanceOfErc20(apeAddress);
-
+    console.log(11, balance)
     if (balance) {
       appState.selectedToken = {
         ...appState.selectedToken,
@@ -180,29 +184,29 @@ const loadNewApe = async (apeAddress: string, broker: ElectronBroker) => {
 const start = async (broker: ElectronBroker) => {
   // Load Settings
   if (store.get('chainId')) {
-    appState.settings.chainId = store.get('chainId') as string;
+    appState.settings.chainId = store.get('chainId');
   }
   if (store.has('apeAmount')) {
-    appState.settings.apeAmount = store.get('apeAmount') as string;
+    appState.settings.apeAmount = store.get('apeAmount');
   }
   if (store.has('minProfit')) {
-    appState.settings.minProfit = store.get('minProfit') as string;
+    appState.settings.minProfit = store.get('minProfit');
   }
   if (store.has('gasPrice')) {
-    appState.settings.gasPrice = store.get('gasPrice') as string;
+    appState.settings.gasPrice = store.get('gasPrice');
   }
   if (store.has('gasLimit')) {
-    appState.settings.gasLimit = store.get('gasLimit') as string;
+    appState.settings.gasLimit = store.get('gasLimit');
   }
   if (store.has('maxSlippage')) {
-    appState.settings.maxSlippage = store.get('maxSlippage') as string;
+    appState.settings.maxSlippage = store.get('maxSlippage');
   }
 
   // Bot already setted up!
   if (store.has('privateKey')) {
     const privateKey = store.get('privateKey');
 
-    appState.privateKey = privateKey as string;
+    appState.privateKey = privateKey;
 
     if (appState.settings.chainId) {
       SuperWallet.AddPrivateKey(appState.settings.chainId, appState.privateKey);
@@ -211,6 +215,7 @@ const start = async (broker: ElectronBroker) => {
     const apeStore = new ElectronStore(`${privateKey}:apeOrders`, 'address');
 
     const allApes = await apeStore.Load<ApeOrder>();
+
 
     // Load Portfolio Apes
     allApes.forEach((apeOrder) => {
@@ -274,11 +279,11 @@ const start = async (broker: ElectronBroker) => {
   if (store.has('telegramAPI') && store.has('telegramAPIHASH')) {
     if (store.has('telegramSession') && store.has('telegramChannel')) {
       const tgOption = {
-        api: store.get('telegramAPI') as string,
-        hash: store.get('telegramAPIHASH') as string,
-        session: store.get('telegramSession') as string,
-        channel: store.get('telegramChannel') as string,
-        filter: store.get('telegramFilter') as string || '',
+        api: store.get('telegramAPI'),
+        hash: store.get('telegramAPIHASH'),
+        session: store.get('telegramSession'),
+        channel: store.get('telegramChannel'),
+        filter: store.get('telegramFilter') || '',
       };
 
       if (tgOption?.channel?.length) {
@@ -337,6 +342,7 @@ const start = async (broker: ElectronBroker) => {
   });
 
   broker.msg.on('button:control', async (event, action, apeAddress) => {
+
     try {
       if (action === 'start') {
         startNewApe(apeAddress, broker);
@@ -350,6 +356,7 @@ const start = async (broker: ElectronBroker) => {
   });
 
   broker.msg.on('setting:async', async (event, arg) => {
+    // Настройка в модалке
     if (appState.settings.chainId != arg.chain || appState.privateKey != arg.privateKey) {
       SuperWallet.AddPrivateKey(arg.chain, arg.privateKey);
     }
@@ -362,7 +369,6 @@ const start = async (broker: ElectronBroker) => {
     appState.settings.gasLimit = arg.gasLimit;
     appState.settings.maxSlippage = arg.maxSlippage;
 
-    console.log(appState.settings);
   });
 
   broker.msg.on('start:sync', () => {

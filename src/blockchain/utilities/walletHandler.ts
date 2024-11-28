@@ -1,7 +1,7 @@
 import Web3 from 'web3';
+import Crypto from 'crypto';
 
-const crypto = require('crypto');
-export const randomEntropy = crypto.randomBytes(32).toString('hex');
+export const randomEntropy = Crypto.randomBytes(32).toString('hex');
 
 export interface Account {
   address: string;

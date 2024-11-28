@@ -5,7 +5,7 @@ import { honeyCheckerAbi } from '../../abi/honeyChecker';
 const GAS_LIMIT = '4500000'; // 4.5 million Gas should be enough
 
 export class HoneyChecker {
-  constructor(private web3: Web3) {}
+  constructor(private web3: Web3) { }
 
   async RunHoneyContract(options: {
     from: string;
