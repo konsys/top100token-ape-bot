@@ -1,7 +1,7 @@
 
 
 import { ipcMain } from 'electron';
-import Logger from './util/logger';
+import { Logger } from './util/logger';
 
 export class ElectronBroker {
   public msg: Electron.IpcMain;

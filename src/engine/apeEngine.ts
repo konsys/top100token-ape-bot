@@ -11,7 +11,7 @@ import { SwapWallet } from '../blockchain/swapWallet';
 
 import { EventEmitter } from 'eventemitter3';
 import { ERC20TokenData } from '../blockchain/utilities/erc20';
-import Logger from '../util/logger';
+import { Logger } from '../util/logger';
 import SQL from '../util/sqlStorage';
 
 export interface ApeEngineSettings {
@@ -529,6 +529,6 @@ export class ApeEngine extends EventEmitter {
       const basicData = await this.swapWallet.GetERC20Data(address);
 
       this.erc20Data = basicData;
-    } catch (error) {}
+    } catch (error) { }
   }
 }

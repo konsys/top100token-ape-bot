@@ -9,25 +9,25 @@ class LoggerClass {
     if (!this.instance) {
       this.instance = this;
 
-      if(ipcMain){
+      if (ipcMain) {
         ipcMain.on('logger', (event, payload) => {
           this.log(payload);
         });
       }
-      
+
     }
 
     return this.instance;
   }
 
-  public setWindow (window: Electron.BrowserWindow){
+  public setWindow(window: Electron.BrowserWindow) {
     this.window = window;
   }
 
   public log(...args: any) {
     console.log(...args);
 
-    if(this.window?.webContents){
+    if (this.window?.webContents) {
       this.window.webContents.send('logger:log', [...args]);
     }
 
@@ -36,4 +36,4 @@ class LoggerClass {
 
 const Logger: LoggerClass = new LoggerClass();
 
-export default Logger;
+export { Logger };

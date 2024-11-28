@@ -1,6 +1,6 @@
 import { EventEmitter } from 'eventemitter3';
 import Web3 from 'web3';
-import Logger from '../../util/logger';
+import { Logger } from '../../util/logger';
 
 export class Web3Tx extends EventEmitter {
   constructor(private web3: Web3) {

@@ -2,7 +2,7 @@ import { EventEmitter } from 'eventemitter3';
 import { TelegramClient } from 'telegram/client/TelegramClient';
 import { Api } from 'telegram';
 import { StringSession } from 'telegram/sessions/StringSession';
-import Logger from '../../util/logger';
+import { Logger } from '../../util/logger';
 
 export class TelegramSingaler extends EventEmitter {
   private ready = true;

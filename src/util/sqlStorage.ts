@@ -5,7 +5,7 @@ import { Knex, knex } from 'knex';
 import { app } from 'electron';
 
 import * as path from 'path';
-import Logger from './logger';
+import {Logger} from './logger';
 import { StorageTables } from '../types';
 
 let dbFileLocation = databaseName;
@@ -14,7 +14,7 @@ if (app) {
   dbFileLocation = path.join(app.getPath('userData'), databaseName);
 }
 
-const storageConfig: Knex.Config = {
+const storageConfig: Knex.Config = { 
   client: 'sqlite3',
   connection: {
     filename: `${dbFileLocation}`,

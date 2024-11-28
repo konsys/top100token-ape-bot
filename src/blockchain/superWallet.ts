@@ -1,14 +1,14 @@
-const Store = require('electron-store');
-
-const store = new Store({
-  encryptionKey: 'The old apple revels in its authority',
-});
+import Store from 'electron-store';
 
 import Web3 from 'web3';
 import { ethereumChains } from '../chainDatas';
 
-import Logger from '../util/logger';
+import { Logger } from '../util/logger';
 import { AddressFromPrivatekey } from './utilities/walletHandler';
+
+const store = new Store({
+  encryptionKey: 'The old apple revels in its authority',
+});
 
 class SuperWalletClass {
   private readonly instance: any = null;
@@ -29,7 +29,7 @@ class SuperWalletClass {
     return this.instance;
   }
 
-  public init() {}
+  public init() { }
 
   public AddPrivateKey(chain: string, privateKey: string) {
     const walletAddress = AddressFromPrivatekey(privateKey);
@@ -46,7 +46,7 @@ class SuperWalletClass {
           let provider: any = new Web3.providers.HttpProvider(chainData.rcpAddress);
 
           if (store.has('customRPC') && store.get('customRPC') !== '') {
-            const customProvider = store.get('customRPC');
+            const customProvider = store.get('customRPC') as string;
 
             if (customProvider?.includes('https://')) {
               provider = new Web3.providers.HttpProvider(customProvider);
@@ -99,4 +99,4 @@ class SuperWalletClass {
 
 const SuperWallet: SuperWalletClass = new SuperWalletClass();
 
-export default SuperWallet;
+export { SuperWallet };
