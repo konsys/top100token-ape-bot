@@ -20,7 +20,18 @@ import { SwapWallet } from './blockchain/swapWallet';
 import { ethereumChains } from './chainDatas';
 import { TelegramSingaler } from './plugins/telegram/telegram';
 import { WebsocketSignaler } from './plugins/websocket/websocket';
-const Store = require('electron-store');
+import Store from 'electron-store';
+
+
+// if (process.env.NODE_ENV === 'development') {
+//   require('electron-watch')(
+//     __dirname,
+//     'dev:electron-main',             // npm scripts, means: npm run dev:electron-main
+//     path.join(__dirname, './'),      // cwd
+//     2000,                            // debounce delay
+//   );
+// }
+
 
 let electronBroker: ElectronBroker;
 
@@ -91,7 +102,7 @@ const appState: AppState = {
   selectedToken: undefined,
   privateKey: '',
   runningApes: [],
-  settings: {} as any,
+  settings: {} as unknown as AppState['settings'],
 };
 
 const startNewApe = async (apeAddress: string, broker: ElectronBroker) => {
@@ -169,29 +180,29 @@ const loadNewApe = async (apeAddress: string, broker: ElectronBroker) => {
 const start = async (broker: ElectronBroker) => {
   // Load Settings
   if (store.get('chainId')) {
-    appState.settings.chainId = store.get('chainId');
+    appState.settings.chainId = store.get('chainId') as string;
   }
   if (store.has('apeAmount')) {
-    appState.settings.apeAmount = store.get('apeAmount');
+    appState.settings.apeAmount = store.get('apeAmount') as string;
   }
   if (store.has('minProfit')) {
-    appState.settings.minProfit = store.get('minProfit');
+    appState.settings.minProfit = store.get('minProfit') as string;
   }
   if (store.has('gasPrice')) {
-    appState.settings.gasPrice = store.get('gasPrice');
+    appState.settings.gasPrice = store.get('gasPrice') as string;
   }
   if (store.has('gasLimit')) {
-    appState.settings.gasLimit = store.get('gasLimit');
+    appState.settings.gasLimit = store.get('gasLimit') as string;
   }
   if (store.has('maxSlippage')) {
-    appState.settings.maxSlippage = store.get('maxSlippage');
+    appState.settings.maxSlippage = store.get('maxSlippage') as string;
   }
 
   // Bot already setted up!
   if (store.has('privateKey')) {
     const privateKey = store.get('privateKey');
 
-    appState.privateKey = privateKey;
+    appState.privateKey = privateKey as string;
 
     if (appState.settings.chainId) {
       SuperWallet.AddPrivateKey(appState.settings.chainId, appState.privateKey);
@@ -263,14 +274,14 @@ const start = async (broker: ElectronBroker) => {
   if (store.has('telegramAPI') && store.has('telegramAPIHASH')) {
     if (store.has('telegramSession') && store.has('telegramChannel')) {
       const tgOption = {
-        api: store.get('telegramAPI'),
-        hash: store.get('telegramAPIHASH'),
-        session: store.get('telegramSession'),
-        channel: store.get('telegramChannel'),
-        filter: store.get('telegramFilter') || '',
+        api: store.get('telegramAPI') as string,
+        hash: store.get('telegramAPIHASH') as string,
+        session: store.get('telegramSession') as string,
+        channel: store.get('telegramChannel') as string,
+        filter: store.get('telegramFilter') as string || '',
       };
 
-      if (tgOption?.channel?.length > 0) {
+      if (tgOption?.channel?.length) {
         const telegramSignaler = new TelegramSingaler(
           tgOption.api,
           tgOption.hash,

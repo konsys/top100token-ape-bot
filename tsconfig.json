@@ -11,7 +11,7 @@
     "experimentalDecorators": true,
     "declaration": false,
     "outDir": "./build",
-    "module": "commonjs",
+    "module": "CommonJS",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true                         
