@@ -3,6 +3,7 @@ import { TelegramClient } from 'telegram/client/TelegramClient';
 import { Api } from 'telegram';
 import { StringSession } from 'telegram/sessions/StringSession';
 import { Logger } from '../../util/logger';
+import { checkIsAddress } from '../../util/utils';
 
 export class TelegramSingaler extends EventEmitter {
   private ready = true;
@@ -117,8 +118,7 @@ export class TelegramSingaler extends EventEmitter {
     }
 
     if (content.length > 42) {
-      const regex = /0x[a-fA-F0-9]{40}/;
-      const almostAddress = content.match(regex);
+      const almostAddress = checkIsAddress(content);
 
       if (almostAddress && almostAddress[0]) {
         return almostAddress[0];

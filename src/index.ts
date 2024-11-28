@@ -22,6 +22,9 @@ import { TelegramSingaler } from './plugins/telegram/telegram';
 import { WebsocketSignaler } from './plugins/websocket/websocket';
 import Store from 'electron-store';
 
+const TG_ENABLED = false;
+const WS_ENABLED = false;
+
 if (process.env.NODE_ENV === 'development') {
   require('electron-watch')(
     __dirname,
@@ -238,10 +241,10 @@ const start = async (broker: ElectronBroker) => {
     });
   }
 
-  /*
+
   const websocketSignal = new WebsocketSignaler('', 'testSignal', 'binance');
 
-  if (websocketSignal) {
+  if (WS_ENABLED && websocketSignal) {
     websocketSignal.on('newSignal', async (address: string) => {
       try {
         if (store.has('signalHistoryTg')) {
@@ -275,10 +278,10 @@ const start = async (broker: ElectronBroker) => {
       }
     });
   }
-  */
+
 
   // TELEGRAM PLUGIN
-  if (store.has('telegramAPI') && store.has('telegramAPIHASH')) {
+  if (TG_ENABLED && store.has('telegramAPI') && store.has('telegramAPIHASH')) {
     if (store.has('telegramSession') && store.has('telegramChannel')) {
       const tgOption = {
         api: store.get('telegramAPI'),

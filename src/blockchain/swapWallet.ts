@@ -23,7 +23,7 @@ import { Web3Tx } from './utilities/transactionHandler';
 import { ethereumChains } from '../chainDatas';
 import { ChainData, erc20DB } from '../types';
 import { HoneyChecker } from './utilities/honeyCheck';
-
+const DEFAULT_GAS_LIMIT = '1600000';
 export const SwapWalletStore: Map<string, SwapWallet> = new Map();
 
 export class SwapWallet {
@@ -62,7 +62,7 @@ export class SwapWallet {
       this.walletAddress = AddressFromPrivatekey(this.walletPrivateKey);
       this.gasPrice =
         gasPrice && !new BigNumber(gasPrice).isNaN() ? Web3.utils.toWei(gasPrice, 'gwei') : chainData.defaultGas;
-      this.gasLimit = gasLimit && !new BigNumber(gasLimit).isNaN() ? new BigNumber(gasLimit).toString() : '1600000';
+      this.gasLimit = gasLimit && !new BigNumber(gasLimit).isNaN() ? new BigNumber(gasLimit).toString() : DEFAULT_GAS_LIMIT;
 
       SuperWallet.Add(this.chainData.id, this.walletAddress);
 
@@ -379,6 +379,7 @@ swapExactTokensForETHSupportingFeeOnTransferTokens
 
     throw new Error('Unable to create rawTransaction!');
   }
+
   public async GetEthBalance() {
     const balance = await this.web3.eth.getBalance(this.walletAddress);
 
