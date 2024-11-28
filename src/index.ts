@@ -22,16 +22,17 @@ import { TelegramSingaler } from './plugins/telegram/telegram';
 import { WebsocketSignaler } from './plugins/websocket/websocket';
 import Store from 'electron-store';
 
-
-// if (process.env.NODE_ENV === 'development') {
-//   require('electron-watch')(
-//     __dirname,
-//     'dev:electron-main',             // npm scripts, means: npm run dev:electron-main
-//     path.join(__dirname, './'),      // cwd
-//     2000,                            // debounce delay
-//   );
-// }
-
+console.log(121);   
+console.log(234);  
+if (process.env.NODE_ENV === 'development') {
+  require('electron-watch')(
+    __dirname,
+    'dev',             // npm scripts, means: npm run dev:electron-main
+    path.join(__dirname, './'),      // cwd
+    2000,                            // debounce delay
+  );
+}
+ 
 
 let electronBroker: ElectronBroker;
 
@@ -61,7 +62,7 @@ const createWindow = (): Electron.BrowserWindow => {
 
   return window;
 };
-
+console.log(6663456);  
 if (app) {
   Store.initRenderer();
   SQL.init();

@@ -21,7 +21,6 @@ window.onload = (event) => {
     walletBalance: 'loading...',
   });
 
-  console.log(1234596, store.get('privateKey'))
   if (store.get('privateKey')) {
     document.getElementById('setting1').value = store.get('privateKey');
   } else {
