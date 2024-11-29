@@ -1,7 +1,7 @@
 import Store from 'electron-store';
 
 import Web3 from 'web3';
-import { ethereumChains } from '../chainDatas';
+import { chainsData } from '../chainsData';
 
 import { Logger } from '../util/logger';
 import { AddressFromPrivatekey } from './utilities/walletHandler';
@@ -20,7 +20,7 @@ class SuperWalletClass {
       this.instance = this;
     }
 
-    ethereumChains.forEach((e) => {
+    chainsData.forEach((e) => {
       this.nonceStore.set(e.id, new Map());
     });
 
@@ -40,7 +40,7 @@ class SuperWalletClass {
   public async Add(chain: string, walletAddress: string): Promise<void> {
     try {
       if (!this.nonceStore.get(chain)?.has(walletAddress)) {
-        const chainData = ethereumChains.find((e) => e.id === chain);
+        const chainData = chainsData.find((e) => e.id === chain);
 
         if (chainData) {
           let provider: any = new Web3.providers.HttpProvider(chainData.rcpAddress);
@@ -48,10 +48,10 @@ class SuperWalletClass {
           if (store.has('customRPC') && store.get('customRPC') !== '') {
             const customProvider = store.get('customRPC') as string;
 
-            if (customProvider?.includes('https://')) {
+            if (customProvider?.includes('https://') || customProvider?.includes('http://')) {
               provider = new Web3.providers.HttpProvider(customProvider);
             }
-            if (customProvider?.includes('wss://')) {
+            if (customProvider?.includes('wss://') || customProvider?.includes('ws://')) {
               provider = new Web3.providers.WebsocketProvider(customProvider);
             }
           }

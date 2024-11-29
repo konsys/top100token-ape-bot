@@ -142,7 +142,7 @@ export enum ApeState {
   retryBuyLimitAndStopped = 'APE BUY RETRY LIMIT REACHED, APE STOPPED!',
   buyStarted = 'APE BUY STARTED!',
   buySuccess = 'APE BUY SUCCESS!',
-  wait = 'Wait for buy!',
+  wait = 'APE WAIT FOR BUY!',
   waitLiquidity = 'APE WAIT FOR LIQUDITY!',
   startedBuy = 'APE BUY STARTED!',
   retryBuy = 'APE BUY STARTED!',

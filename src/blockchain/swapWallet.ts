@@ -20,7 +20,7 @@ import { Logger } from '../util/logger';
 import { SuperWallet } from './superWallet';
 import { uniFactoryABI } from '../abi/uniswapFactory';
 import { Web3Tx } from './utilities/transactionHandler';
-import { ethereumChains } from '../chainDatas';
+import { chainsData } from '../chainsData';
 import { ChainData, erc20DB } from '../types';
 import { HoneyChecker } from './utilities/honeyCheck';
 const DEFAULT_GAS_LIMIT = '1600000';
@@ -39,7 +39,7 @@ export class SwapWallet {
       return SwapWalletStore.get(`${chainId}:${walletPrivateKey}`) as SwapWallet;
     }
 
-    const chainData = ethereumChains.find((e) => e.id === chainId);
+    const chainData = chainsData.find((e) => e.id === chainId);
 
     if (chainData) {
       this.chainData = chainData;

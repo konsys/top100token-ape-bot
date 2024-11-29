@@ -17,7 +17,7 @@ import Web3 from 'web3';
 import SQL from './util/sqlStorage';
 
 import { SwapWallet } from './blockchain/swapWallet';
-import { ethereumChains } from './chainDatas';
+import { chainsData } from './chainsData';
 import { TelegramSingaler } from './plugins/telegram/telegram';
 import { WebsocketSignaler } from './plugins/websocket/websocket';
 import Store from 'electron-store';
@@ -392,7 +392,7 @@ const start = async (broker: ElectronBroker) => {
       );
 
       setInterval(async () => {
-        const chainData = ethereumChains.find((e) => e.id === appState.settings.chainId);
+        const chainData = chainsData.find((e) => e.id === appState.settings.chainId);
 
         if (chainData) {
           const wallet = new SwapWallet(appState.settings.chainId, appState.privateKey);

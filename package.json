@@ -49,7 +49,9 @@
     "postinstall": "install-app-deps",
     "cleanup": "rimraf dist",
     "mac": "npm run cleanup && npm run build && electron-builder build --mac",
-    "win": "npm run cleanup && npm run build && electron-builder build --win portable"
+    "win": "npm run cleanup && npm run build && electron-builder build --win portable",
+    "install:chain": "curl -L https://foundry.paradigm.xyz | bash && clear && echo $0 | exec && foundryup",
+    "chain": "anvil --chain-id 1337 --fork-url https://mainnet.chainnodes.org/72ae682a-b3a9-4fea-8c42-60d08228ea26"
   },
   "keywords": [],
   "author": "",

@@ -242,7 +242,7 @@ export class ApeEngine extends EventEmitter {
         this.swapWallet.chainData.router,
       );
 
-      // Logger.log('Honey / Slip checker result', {
+      // Logger.log('Honey / Slip checker result', { 
       //   ...slipResult,
       // });
 

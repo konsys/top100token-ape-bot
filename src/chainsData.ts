@@ -13,7 +13,21 @@ type TEtheriumChain = {
   honeyChecker: string;
   wUSD?: string;
 }
-export const ethereumChains: TEtheriumChain[] = [
+export const chainsData: TEtheriumChain[] = [
+  {
+    id: 'local',
+    name: 'Local test network',
+    slug: 'LTN',
+    logo: './assets/bsc.png',
+    scanLogo: './assets/bscscan.png',
+    router: '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D',
+    factory: '0xcA143Ce32Fe78f1f7019d7d551a6402fC5350c73',
+    rcpAddress: 'http://localhost:8545/',
+    defaultGas: '5000000000',
+    wCoin: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
+    testContract: '0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c',
+    honeyChecker: '0x52689BA8e1D164A16fb06918A18978d03fF6EB3F',
+  },
   {
     id: 'binance',
     name: 'Binance Smart Chain (BSC)',
