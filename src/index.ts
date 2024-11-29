@@ -21,6 +21,7 @@ import { ethereumChains } from './chainDatas';
 import { TelegramSingaler } from './plugins/telegram/telegram';
 import { WebsocketSignaler } from './plugins/websocket/websocket';
 import Store from 'electron-store';
+import { isAddress } from 'ethers';
 
 const TG_ENABLED = false;
 const WS_ENABLED = false;
@@ -28,9 +29,9 @@ const WS_ENABLED = false;
 if (process.env.NODE_ENV === 'development') {
   require('electron-watch')(
     __dirname,
-    'dev',             // npm scripts, means: npm run dev:electron-main
-    path.join(__dirname, './'),      // cwd
-    15000,                            // debounce delay
+    'dev',
+    path.join(__dirname, './'),
+    15000,
   );
 
 }
@@ -125,8 +126,7 @@ const startNewApe = async (apeAddress: string, broker: ElectronBroker) => {
       gasLimit: appState.settings.gasLimit,
       maxSlippage: appState.settings.maxSlippage,
     });
-    // 0x514910771AF9Ca656af840dff83E8264EcF986CA 
-    console.log(1111, apeAddress);
+
 
     await apeEngine.SafeBuyApe(apeAddress);
 
@@ -143,7 +143,9 @@ const startNewApe = async (apeAddress: string, broker: ElectronBroker) => {
 
 // При смене адреса в инпуте 
 const loadNewApe = async (apeAddress: string, broker: ElectronBroker) => {
-  if (apeAddress) {
+  // 0x514910771AF9Ca656af840dff83E8264EcF986CA 
+
+  if (isAddress(apeAddress)) {
     Logger.log('New ape address', apeAddress);
 
     const wallet = new SwapWallet(appState.settings.chainId, appState.privateKey);
@@ -242,42 +244,42 @@ const start = async (broker: ElectronBroker) => {
   }
 
 
-  const websocketSignal = new WebsocketSignaler('', 'testSignal', 'binance');
+  // const websocketSignal = new WebsocketSignaler('', 'testSignal', 'binance');
 
-  if (WS_ENABLED && websocketSignal) {
-    websocketSignal.on('newSignal', async (address: string) => {
-      try {
-        if (store.has('signalHistoryTg')) {
-          if (store.get('signalHistoryTg') === address) {
-            return;
-          }
-        }
+  // if (WS_ENABLED && websocketSignal) {
+  //   websocketSignal.on('newSignal', async (address: string) => {
+  //     try {
+  //       if (store.has('signalHistoryTg')) {
+  //         if (store.get('signalHistoryTg') === address) {
+  //           return;
+  //         }
+  //       }
 
-        store.set('signalHistoryTg', address);
+  //       store.set('signalHistoryTg', address);
 
-        if (appState.runningApes.find((e) => e.contractAddress === address && e.orderStatus <= 7)) {
-          Logger.log('You cannot create new Ape order for the given address!');
-          return;
-        }
+  //       if (appState.runningApes.find((e) => e.contractAddress === address && e.orderStatus <= 7)) {
+  //         Logger.log('You cannot create new Ape order for the given address!');
+  //         return;
+  //       }
 
-        const apeEngine = new ApeEngine({
-          chainId: appState.settings.chainId,
-          privateKey: appState.privateKey,
-          apeAmount: appState.settings.apeAmount,
-          minProfitPct: appState.settings.minProfit,
-          gasprice: appState.settings.gasPrice,
-          gasLimit: appState.settings.gasLimit,
-          maxSlippage: appState.settings.maxSlippage,
-        });
+  //       const apeEngine = new ApeEngine({
+  //         chainId: appState.settings.chainId,
+  //         privateKey: appState.privateKey,
+  //         apeAmount: appState.settings.apeAmount,
+  //         minProfitPct: appState.settings.minProfit,
+  //         gasprice: appState.settings.gasPrice,
+  //         gasLimit: appState.settings.gasLimit,
+  //         maxSlippage: appState.settings.maxSlippage,
+  //       });
 
-        await apeEngine.SafeBuyApe(address);
+  //       await apeEngine.SafeBuyApe(address);
 
-        appState.runningApes.push(apeEngine);
-      } catch (error) {
-        Logger.log('Unable to start Websocket Signal APE');
-      }
-    });
-  }
+  //       appState.runningApes.push(apeEngine);
+  //     } catch (error) {
+  //       Logger.log('Unable to start Websocket Signal APE');
+  //     }
+  //   });
+  // }
 
 
   // TELEGRAM PLUGIN
@@ -336,6 +338,7 @@ const start = async (broker: ElectronBroker) => {
   }
 
   broker.msg.on('apeAddress:changed', async (event, apeAddress) => {
+    console.log(3453456)
     try {
       loadNewApe(apeAddress, broker);
     } catch (error) {

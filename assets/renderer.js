@@ -121,11 +121,7 @@ window.onload = (event) => {
 
   document.getElementById('apeAddress').addEventListener('input', function () {
     const apeAddress = document.getElementById('apeAddress').value.trim();
-
-    if (apeAddress.length !== 42) {
-      return;
-    }
-
+    console.log(apeAddress)
     ipcRenderer.send('apeAddress:changed', apeAddress);
   });
 

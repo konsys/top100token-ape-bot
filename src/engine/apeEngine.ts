@@ -39,7 +39,7 @@ export class ApeEngine extends EventEmitter {
   private currApproveRerty = 0;
   private currSellRetry = 0;
 
-  public contractAddress = '';
+  public contractAddress: string = '';
 
   public liqudityAddress?: string;
 
@@ -56,7 +56,7 @@ export class ApeEngine extends EventEmitter {
 
   public minProfit: number;
 
-  private lastState = '';
+  private lastState: string = '';
   public state: ApeState = ApeState.wait;
 
   public isApproved = false;
@@ -64,9 +64,9 @@ export class ApeEngine extends EventEmitter {
 
   public paused = false;
 
-  public swapValue = '0';
+  public swapValue: string = '0';
 
-  public currProfit = '0.00%';
+  public currProfit: string = '0.00%';
 
   public erc20Data: ERC20TokenData | undefined;
 
@@ -268,7 +268,7 @@ export class ApeEngine extends EventEmitter {
           return;
         }
 
-        Logger.log(`Transaction pre-check failed ${this.contractAddress}`);
+        Logger.log(`Transaction pre-check isHoneypot failed ${this.contractAddress}`);
       }
 
       this.Events.push({
