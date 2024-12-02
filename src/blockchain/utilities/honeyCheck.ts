@@ -27,6 +27,9 @@ export class HoneyChecker {
 
     const data = honeyCheck.methods.honeyCheck(options.token, options.router).encodeABI();
 
+    // 0x91dFbEE3965baAEE32784c2d546B7a0C62F268c9
+
+    console.log(11111, data)
     let honeyTxResult: any;
 
     try {
@@ -82,3 +85,6 @@ export class HoneyChecker {
     };
   }
 }
+
+
+// ALICE=0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266  BON=0x91dFbEE3965baAEE32784c2d546B7a0C62F268c9 UNLUCKY_USER=0x46B10E7a69594452e12F0ae8Fb205F9d809db33d cast call $DAI \"balanceOf(address)(uint256)\" $ALICE

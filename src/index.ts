@@ -224,7 +224,7 @@ const start = async (broker: ElectronBroker) => {
 
     const allApes = await apeStore.Load<ApeOrder>();
 
-    console.log(111111, allApes)
+
     // Load Portfolio Apes
     allApes.forEach((apeOrder) => {
       // Only load orders which has still something to do

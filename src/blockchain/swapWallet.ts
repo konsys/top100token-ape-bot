@@ -120,7 +120,7 @@ export class SwapWallet {
       });
 
 
-      console.log(22222, slippageResult.error)
+      console.log(22222, slippageResult)
       return {
         ...slippageResult,
       } as any;

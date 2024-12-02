@@ -84,7 +84,7 @@ window.onload = (event) => {
     document.getElementById('token:decimal').innerHTML = payload.decimals;
     document.getElementById('token:balance').innerHTML = payload.balance;
 
-    console.log(1212121212, payload.error)
+
     if (payload.isHoneypot === 0) {
       document.getElementById('token:taxes').innerHTML = `Buy: ${payload.buyTax}% / Sell: ${payload.sellTax}%`;
     }
