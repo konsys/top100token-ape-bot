@@ -46,6 +46,8 @@ export class SwapWallet {
 
       let provider: any = new Web3.providers.HttpProvider(this.chainData.rcpAddress);
 
+      // 0x91dFbEE3965baAEE32784c2d546B7a0C62F268c9
+
       if (store.has('customRPC') && store.get('customRPC') !== '') {
         this.customProvider = store.get('customRPC');
 
@@ -58,12 +60,12 @@ export class SwapWallet {
       }
 
       this.web3 = new Web3(provider);
-
+    
       this.walletAddress = AddressFromPrivatekey(this.walletPrivateKey);
       this.gasPrice =
         gasPrice && !new BigNumber(gasPrice).isNaN() ? Web3.utils.toWei(gasPrice, 'gwei') : chainData.defaultGas;
       this.gasLimit = gasLimit && !new BigNumber(gasLimit).isNaN() ? new BigNumber(gasLimit).toString() : DEFAULT_GAS_LIMIT;
-
+    
       SuperWallet.Add(this.chainData.id, this.walletAddress);
 
       if (!gasPrice) {
@@ -73,6 +75,8 @@ export class SwapWallet {
       const self = this;
 
       SwapWalletStore.set(`${chainId}:${walletPrivateKey}`, self);
+  
+
     } else {
       throw new Error('Invalid Chain/Swap');
     }
@@ -116,6 +120,7 @@ export class SwapWallet {
       });
 
 
+      console.log(22222, slippageResult.error)
       return {
         ...slippageResult,
       } as any;

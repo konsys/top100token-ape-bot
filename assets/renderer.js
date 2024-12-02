@@ -84,12 +84,17 @@ window.onload = (event) => {
     document.getElementById('token:decimal').innerHTML = payload.decimals;
     document.getElementById('token:balance').innerHTML = payload.balance;
 
+    console.log(1212121212, payload.error)
     if (payload.isHoneypot === 0) {
       document.getElementById('token:taxes').innerHTML = `Buy: ${payload.buyTax}% / Sell: ${payload.sellTax}%`;
     }
 
     if (payload.isHoneypot === 1) {
       document.getElementById('token:taxes').innerHTML = `Unable to trade!`;
+    }
+    // 0x91dFbEE3965baAEE32784c2d546B7a0C62F268c9
+    if (payload.error) {
+      document.getElementById('token:taxes').innerHTML = payload.error;
     }
 
     if (payload.isHoneypot === -1) {

@@ -15,7 +15,8 @@ type TEtheriumChain = {
 }
 export const chainsData: TEtheriumChain[] = [
   {
-    id: 'local',
+    // 0x91dFbEE3965baAEE32784c2d546B7a0C62F268c9
+    id: 'localtestnet',
     name: 'Local test network',
     slug: 'LTN',
     logo: './assets/bsc.png',

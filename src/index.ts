@@ -209,6 +209,7 @@ const start = async (broker: ElectronBroker) => {
     appState.settings.maxSlippage = store.get('maxSlippage');
   }
 
+ 
   // Bot already setted up!
   if (store.has('privateKey')) {
     const privateKey = store.get('privateKey');
@@ -223,7 +224,7 @@ const start = async (broker: ElectronBroker) => {
 
     const allApes = await apeStore.Load<ApeOrder>();
 
-
+    console.log(111111, allApes)
     // Load Portfolio Apes
     allApes.forEach((apeOrder) => {
       // Only load orders which has still something to do
@@ -338,7 +339,7 @@ const start = async (broker: ElectronBroker) => {
   }
 
   broker.msg.on('apeAddress:changed', async (event, apeAddress) => {
-    console.log(3453456)
+  
     try {
       loadNewApe(apeAddress, broker);
     } catch (error) {
