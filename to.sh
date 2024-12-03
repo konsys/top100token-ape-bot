@@ -15,7 +15,17 @@ cast call $USDT \
   "balanceOf(address)(uint256)" \
   $USDT
 
-cast rpc anvil_impersonateAccount $USDT
+cast rpc anvil_impersonateAccount 0x3451B6b219478037a1AC572706627FC2BDa1e812
+
+cast send $USDT \
+--from 0x3451B6b219478037a1AC572706627FC2BDa1e812 \
+  "transfer(address,uint256)(bool)" \
+  $ALICE \
+  300000000000000000000000 \
+  --unlocked \
+  --gas-limit=4500000
+
+cast rpc anvil_impersonateAccount $USER
 
 cast send $USDT \
 --from $USER \
@@ -56,12 +66,13 @@ cast call $DAI \
 cast rpc anvil_impersonateAccount $UNLUCKY_USER
 
 
- cast send $BON \
---from $BON \
+ cast send $DAI \
+--from $UNLUCKY_USER \
   "transfer(address,uint256)(bool)" \
   $ALICE \
   300000000000000000000000 \
-  --unlocked
+  --unlocked \
+  --gas-limit=30000
 
   cast call $DAI \
   "balanceOf(address)(uint256)" \

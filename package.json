@@ -60,9 +60,6 @@
     "install:chain": "curl -L https://foundry.paradigm.xyz | bash && clear && echo $0 | exec && foundryup",
     "chain": "anvil --chain-id 1337 --fork-url https://mainnet.chainnodes.org/72ae682a-b3a9-4fea-8c42-60d08228ea26",
     "chain1": "npx hardhat node --fork https://mainnet.chainnodes.org/72ae682a-b3a9-4fea-8c42-60d08228ea26",
-    "ch2": "anvil --fork-url https://mainnet.chainnodes.org/72ae682a-b3a9-4fea-8c42-60d08228ea26",
-    "ch3": "ALICE=0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266  DAI=0x6b175474e89094c44da98b954eedeac495271d0f UNLUCKY_USER=0xfc2eE3bD619B7cfb2dE2C797b96DeeCbD7F68e46 cast call $DAI \"balanceOf(address)(uint256)\" $ALICE",
-    "ch4": "ALICE=0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266  DAI=0x6b175474e89094c44da98b954eedeac495271d0f UNLUCKY_USER=0xfc2eE3bD619B7cfb2dE2C797b96DeeCbD7F68e46 cast call $DAI \"balanceOf(address)(uint256)\" $DAI",
     "ch5": "ALICE=0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266  BON=0x91dFbEE3965baAEE32784c2d546B7a0C62F268c9 UNLUCKY_USER=0x46B10E7a69594452e12F0ae8Fb205F9d809db33d cast call $BON \"balanceOf(address)(uint256)\" $ALICE"
   },
   "keywords": [],
